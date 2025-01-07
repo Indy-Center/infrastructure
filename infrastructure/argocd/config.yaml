@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: argocd
+spec:
+  dex:
+    openShiftOAuth: false
+    config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $dex.github.clientID
+            clientSecret: $dex.github.clientSecret
+            orgs:
+              - name: indy-center
+                teams: 
+                  - devops-team
+  rbac:
+    defaultPolicy: 'role:readonly'
+    policy: |
+      g, github:*, role:admin
+  server:
+    insecure: false 

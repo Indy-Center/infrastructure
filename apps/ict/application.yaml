@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ict
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: ict=ghcr.io/indy-center/controller-tools
+    argocd-image-updater.argoproj.io/ict.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/ict.update-strategy: latest
+spec:
+  project: apps
+  source:
+    repoURL: https://github.com/indy-center/infrastructure.git
+    targetRevision: HEAD
+    path: apps/ict/overlays/development
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: development
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true 

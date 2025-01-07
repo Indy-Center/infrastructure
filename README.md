@@ -1,32 +1,10 @@
-# Shared Services / Infrastructure
+# Indy Center Infrastructure
 
-This Repository contains compose files for various stacks which provide shared services across the Docker Swarm.
+This repository contains the infrastructure configuration for Indy Center. It uses [GitOps](https://www.gitops.tech/) principles to manage the infrastructure and applications.
 
-## Running
+## Infrastructure Management
 
-First, create the shared web network for other stacks to use for Traefik.
+The infrastructure is managed using:
 
-```sh
-docker network create -d overlay web
-```
-
-Then, deploy the shared services stack
-
-```sh
-docker stack deploy -c ./traefik-stack.yaml traefik
-docker stack deploy -c ./swarmpit-stack.yaml swarmpit
-```
-
-## Traefik Routing
-
-To enable routing from Traefik to the applications, you'll need the following labels:
-
-```yaml
-labels:
-  - "traefik.enable=true"
-  - "traefik.http.routers.<app-name>.rule=Host(`<domain-name>`)"
-  - "traefik.http.routers.<app-name>.entrypoints=websecure"
-  - "traefik.http.services.<app-name>.loadbalancer.server.port=<http-port>"
-  - "traefik.http.routers.<app-name>.tls.certresolver=myresolver"
-  - "traefik.docker.network=web"
-```
+- [k3s](https://k3s.io/) - Lightweight Kubernetes distribution
+- [ArgoCD](https://argoproj.github.io/cd/) - GitOps continuous delivery tool

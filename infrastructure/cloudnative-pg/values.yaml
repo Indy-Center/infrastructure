@@ -1,0 +1,7 @@
+cloudnative-pg:
+  # We'll use default values for now as they're suitable for most deployments
+  replicaCount: 1
+  
+  # Enable monitoring if you have Prometheus installed
+  monitoring:
+    enablePodMonitor: false 
