@@ -1,0 +1,107 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-production-traefik:
+    name: Deploy Production - Traefik
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Traefik
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/traefik-stack.yaml"
+          name: "traefik"
+
+  deploy-dev-traefik:
+    name: Deploy Dev - Traefik
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Traefik
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST_DEV }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/traefik-stack.yaml"
+          name: "traefik"
+
+  deploy-production-swarmpit:
+    name: Deploy Production - Swarmpit
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Swarmpit
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/swarmpit-stack.yaml"
+          name: "swarmpit"
+
+  deploy-dev-swarmpit:
+    name: Deploy Dev - Swarmpit
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ secrets.DEPLOY_HOST_DEV }}
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Swarmpit
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST_DEV }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/swarmpit-stack.yaml"
+          name: "swarmpit"
+
+  deploy-production-postgres:
+    name: Deploy Production - Postgres
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Postgres
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/postgres-stack.yaml"
+          name: "postgres"
+
+  deploy-dev-postgres:
+    name: Deploy Dev - Postgres
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+
+      - name: Deploy Postgres
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST_DEV }}
+          user: ${{ secrets.DEPLOY_USER }}
+          ssh_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          file: "infrastructure/postgres-stack.yaml"
+          name: "postgres"
