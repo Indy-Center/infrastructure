@@ -25,11 +25,11 @@ spec:
           - name: DATABASE_URL
             value: "postgresql://ict:$(password)@ict-db-rw:5432/ict"
           - name: CONNECT_CALLBACK_URL
-            value: "https://ict.chasingthe.cloud/login/connect/callback"
+            value: "https://tools.dev.zid-internal.com/login/connect/callback"
           - name: CONNECT_BASE_URL
             value: "https://auth-dev.vatsim.net"
           - name: CONNECT_CLIENT_ID
-            value: "979"
+            value: "965"
         envFrom:
           - secretRef:
               name: ict-secrets
