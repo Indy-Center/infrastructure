@@ -14,8 +14,8 @@ data:
         id: github
         name: GitHub
         config:
-          clientID: $GITHUB_CLIENT_ID
-          clientSecret: $GITHUB_CLIENT_SECRET
+          clientID: $dex.github.clientId
+          clientSecret: $dex.github.clientSecret
           orgs:
           - name: indy-center
             teams:
