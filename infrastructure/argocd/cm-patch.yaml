@@ -17,3 +17,4 @@ data:
           - name: indy-center
             teams:
             - devops-team
+  server.insecure: "true"
