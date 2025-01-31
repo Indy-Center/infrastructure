@@ -7,3 +7,16 @@ data:
   resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration: |
     jqPathExpressions:
     - '.webhooks[]?.clientConfig.caBundle'
+  url: https://argocd.dev.zid-internal.com
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: $dex.github.clientId
+          clientSecret: $dex.github.clientSecret
+          orgs:
+          - name: indy-center
+            teams:
+            - devops-team
