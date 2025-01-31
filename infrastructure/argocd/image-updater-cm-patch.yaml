@@ -5,3 +5,4 @@ metadata:
   namespace: argocd
 data:
   # Configuration is handled via ArgoCD application annotations 
+  applications_api: kubernetes 
