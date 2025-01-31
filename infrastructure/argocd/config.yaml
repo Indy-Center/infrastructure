@@ -11,8 +11,8 @@ spec:
           id: github
           name: GitHub
           config:
-            clientID: $github.clientID
-            clientSecret: $github.clientSecret
+            clientID: $dex.github.clientId
+            clientSecret: $dex.github.clientSecret
             orgs:
               - name: indy-center
                 teams:
