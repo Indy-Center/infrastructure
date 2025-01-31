@@ -4,9 +4,6 @@ metadata:
   name: argocd-cm
   namespace: argocd
 data:
-  resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration: |
-    jqPathExpressions:
-    - '.webhooks[]?.clientConfig.caBundle'
   url: https://argocd.dev.zid-internal.com
   dex.config: |
     connectors:
