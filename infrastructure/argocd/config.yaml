@@ -11,15 +11,26 @@ spec:
           id: github
           name: GitHub
           config:
-            clientID: $dex.github.clientID
-            clientSecret: $dex.github.clientSecret
+            clientID: $github.clientID
+            clientSecret: $github.clientSecret
             orgs:
               - name: indy-center
-                teams: 
+                teams:
                   - devops-team
   rbac:
     defaultPolicy: 'role:readonly'
     policy: |
       g, github:*, role:admin
   server:
-    insecure: false 
+    insecure: false
+    env:
+      - name: GITHUB_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: argocd-secret
+            key: dex.github.clientId
+      - name: GITHUB_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argocd-secret
+            key: dex.github.clientSecret
