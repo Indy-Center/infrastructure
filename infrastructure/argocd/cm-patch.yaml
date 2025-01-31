@@ -21,8 +21,7 @@ data:
   server.insecure: "true"
   policy.default: role:readonly
   policy.csv: |
-    p, role:org-admin, *, *, *, allow
-    g, Indy-Center:devops-team, role:org-admin
+    g, Indy-Center:devops-team, role:admin
     p, role:developer, applications, get, */*, allow
     p, role:developer, applications, sync, */*, allow
     g, Indy-Center:developers, role:developer
