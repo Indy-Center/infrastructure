@@ -14,7 +14,7 @@ spec:
             clientID: $dex.github.clientId
             clientSecret: $dex.github.clientSecret
             orgs:
-              - name: indy-center
+              - name: Indy-Center
                 teams:
                   - devops-team
   rbac:
