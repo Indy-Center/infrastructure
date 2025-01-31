@@ -19,9 +19,3 @@ data:
             - devops-team
             - developers
   server.insecure: "true"
-  policy.default: role:readonly
-  policy.csv: |
-    g, Indy-Center:devops-team, role:admin
-    p, role:developer, applications, get, */*, allow
-    p, role:developer, applications, sync, */*, allow
-    g, Indy-Center:developers, role:developer

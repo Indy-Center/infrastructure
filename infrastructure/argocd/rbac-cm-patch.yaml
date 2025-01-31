@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    g, Indy-Center:devops-team, role:admin
+    p, role:developer, applications, get, */*, allow
+    p, role:developer, applications, sync, */*, allow
+    g, Indy-Center:developers, role:developer 
