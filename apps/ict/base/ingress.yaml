@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ict.chasingthe.cloud
+        - tools.dev.zid-internal.com
       secretName: ict-tls
   rules:
-    - host: ict.chasingthe.cloud
+    - host: tools.dev.zid-internal.com
       http:
         paths:
           - path: /
