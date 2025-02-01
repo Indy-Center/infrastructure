@@ -2,6 +2,8 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: ict-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
   instances: 1
   postgresql:
@@ -21,6 +23,22 @@ spec:
     size: 1Gi
     storageClass: local-path
 
+  # Backup configuration
+  backup:
+    barmanObjectStore:
+      destinationPath: "s3://indy-db-backups-development/ict-db"
+      endpointURL: "https://s3.amazonaws.com"
+      s3Credentials:
+        accessKeyId:
+          name: aws-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: aws-creds
+          key: ACCESS_SECRET_KEY
+    retentionPolicy: "30d"
+
   bootstrap:
-    initdb:
+    recovery:
+      backup:
+        name: ict-db-backup
       database: ict 
