@@ -39,6 +39,4 @@ spec:
 
   bootstrap:
     recovery:
-      backup:
-        name: ict-db-backup
       database: ict 

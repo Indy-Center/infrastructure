@@ -1,0 +1,9 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: ict-db-backup
+spec:
+  schedule: "0 2 * * *"  # Every day at 2 AM
+  backupOwnerReference: self
+  cluster:
+    name: ict-db 
