@@ -4,5 +4,4 @@ metadata:
   name: argocd-image-updater-config
   namespace: argocd
 data:
-  # Configuration is handled via ArgoCD application annotations 
-  applications_api: kubernetes 
+  applications_api: kubernetes
