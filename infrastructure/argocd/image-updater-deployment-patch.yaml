@@ -8,4 +8,4 @@ spec:
       containers:
       - name: argocd-image-updater
         args:
-        - --interval=15s 
+        - --interval=1m 
