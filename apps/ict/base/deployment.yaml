@@ -23,7 +23,10 @@ spec:
           protocol: TCP
         env:
           - name: DATABASE_URL
-            value: "postgresql://ict:$(password)@ict-db-rw:5432/ict"
+            valueFrom:
+              secretKeyRef:
+                name: ict-db-app
+                key: uri
           - name: CONNECT_CALLBACK_URL
             value: "https://tools.dev.zid-internal.com/login/connect/callback"
           - name: CONNECT_BASE_URL

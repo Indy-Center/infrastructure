@@ -6,3 +6,4 @@ resources:
   - service.yaml
   - ingress.yaml
   - db-cluster.yaml
+  - scheduled-backup.yaml

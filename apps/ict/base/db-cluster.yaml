@@ -6,6 +6,7 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
   instances: 1
+  logLevel: debug
   postgresql:
     parameters:
       max_connections: "100"
@@ -23,10 +24,27 @@ spec:
     size: 1Gi
     storageClass: local-path
 
-  # Backup configuration
+  bootstrap:
+    initdb:
+      database: ict
+      owner: ict
+
+  externalClusters:
+    - name: backup-source
+      barmanObjectStore:
+        destinationPath: "s3://indy-db-backups-development"
+        endpointURL: "https://s3.amazonaws.com"
+        s3Credentials:
+          accessKeyId:
+            name: aws-creds
+            key: ACCESS_KEY_ID
+          secretAccessKey:
+            name: aws-creds
+            key: ACCESS_SECRET_KEY
+
   backup:
     barmanObjectStore:
-      destinationPath: "s3://indy-db-backups-development/ict-db"
+      destinationPath: "s3://indy-db-backups-development"
       endpointURL: "https://s3.amazonaws.com"
       s3Credentials:
         accessKeyId:
@@ -36,9 +54,3 @@ spec:
           name: aws-creds
           key: ACCESS_SECRET_KEY
     retentionPolicy: "30d"
-
-  bootstrap:
-    recovery:
-      backup:
-        name: ict-db-backup
-      database: ict 
