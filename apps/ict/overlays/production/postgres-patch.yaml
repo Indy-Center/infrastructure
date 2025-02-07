@@ -1,0 +1,11 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ict-db
+spec:
+  instances: 2  # High availability for production
+  
+  backup:
+    barmanObjectStore:
+      destinationPath: "s3://indy-db-backups-production"  # Different bucket for production
+    retentionPolicy: "90d"  # Longer retention for production 

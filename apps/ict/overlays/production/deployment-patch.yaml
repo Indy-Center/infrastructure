@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ict
+spec:
+  template:
+    spec:
+      containers:
+      - name: ict
+        env:
+          - name: CONNECT_CALLBACK_URL
+            value: "https://tools.zidartcc.org/login/connect/callback"
+          - name: CONNECT_BASE_URL
+            value: "https://auth.vatsim.net"
+          - name: CONNECT_CLIENT_ID
+            value: "1546" 

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ict
+spec:
+  tls:
+    - hosts:
+        - tools.zidartcc.org
+      secretName: ict-prod-tls
+  rules:
+    - host: tools.zidartcc.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ict
+                port:
+                  number: 80 
