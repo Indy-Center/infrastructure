@@ -7,6 +7,9 @@ metadata:
     argocd-image-updater.argoproj.io/image-list: ict=ghcr.io/indy-center/controller-tools
     argocd-image-updater.argoproj.io/ict.pull-secret: pullsecret:argocd/ghcr-secret
     argocd-image-updater.argoproj.io/ict.update-strategy: latest
+    notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
+    notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
+    notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
 spec:
   project: apps
   source:

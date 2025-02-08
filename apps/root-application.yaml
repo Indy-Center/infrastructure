@@ -3,10 +3,6 @@ kind: AppProject
 metadata:
   name: apps
   namespace: argocd
-  annotations:
-    notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
-    notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
-    notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
 spec:
   description: Project for user applications
   sourceRepos:

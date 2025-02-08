@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: ict
 spec:
+  replicas: 2
   template:
     spec:
       containers:
@@ -13,4 +14,11 @@ spec:
           - name: CONNECT_BASE_URL
             value: "https://auth.vatsim.net"
           - name: CONNECT_CLIENT_ID
-            value: "1546" 
+            value: "1546"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi 
