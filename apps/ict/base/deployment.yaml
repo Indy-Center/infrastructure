@@ -62,8 +62,8 @@ spec:
           timeoutSeconds: 10
         resources:
           requests:
-            cpu: 200m
-            memory: 128Mi
+            cpu: 50m       # ~1.5-2x your average usage
+            memory: 128Mi  # Slightly above your average memory usage
           limits:
-            cpu: 500m
-            memory: 256Mi 
+            cpu: 250m      # Allowing room for CPU spikes; adjust if needed
+            memory: 512Mi  # Providing headroom for memory spikes 

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ict-production
+  name: integrated-controller-tools.prod
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: ict=ghcr.io/indy-center/controller-tools:1-main
@@ -18,6 +18,15 @@ spec:
     repoURL: https://github.com/indy-center/infrastructure.git
     targetRevision: HEAD
     path: apps/ict/overlays/production
+    kustomize:
+      patches:
+        - target:
+            kind: Ingress
+            name: ict
+          patch: |-
+            - op: replace
+              path: /spec/rules/0/host
+              value: tools.zidartcc.org
   destination:
     server: https://kubernetes.default.svc
     namespace: production
