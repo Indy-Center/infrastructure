@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - sealed-ict-secret.yaml
 
 namespace: development
 
@@ -13,4 +14,4 @@ patches:
         value: Always
     target:
       kind: Deployment
-      name: ict 
+      name: ict

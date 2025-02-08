@@ -28,11 +28,11 @@ spec:
                 name: ict-db-app
                 key: uri
           - name: CONNECT_CALLBACK_URL
-            value: "https://tools.dev.zid-internal.com/login/connect/callback"
+            value: "https://tools.next.zidartcc.org/login/connect/callback"
           - name: CONNECT_BASE_URL
-            value: "https://auth-dev.vatsim.net"
+            value: "https://auth.vatsim.net"
           - name: CONNECT_CLIENT_ID
-            value: "965"
+            value: "1566"
         envFrom:
           - secretRef:
               name: ict-secrets
