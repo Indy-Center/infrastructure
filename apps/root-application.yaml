@@ -1,6 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
+  name: integrated-controller-tools
+  namespace: argocd
+spec:
+  description: Project for Integrated Controller Tools application
+  sourceRepos:
+    - https://github.com/indy-center/infrastructure.git
+  destinations:
+    - namespace: development
+      server: https://kubernetes.default.svc
+    - namespace: production
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: cert-manager.io
+      kind: Certificate
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
   name: apps
   namespace: argocd
 spec:
@@ -36,7 +57,7 @@ spec:
     path: apps
     directory:
       recurse: true
-      include: "**/application*.yaml"
+      include: "**/application*.yaml,**/project.yaml"
       exclude: "infrastructure/**"
   destination:
     server: https://kubernetes.default.svc

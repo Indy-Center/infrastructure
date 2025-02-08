@@ -11,7 +11,7 @@ metadata:
     notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
     notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
 spec:
-  project: apps
+  project: integrated-controller-tools
   source:
     repoURL: https://github.com/indy-center/infrastructure.git
     targetRevision: HEAD
