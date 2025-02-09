@@ -12,21 +12,21 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Always
+    target:
+      kind: Deployment
+      name: ict
+  - patch: |-
       - op: add
-        path: /spec/template/spec/tolerations
+        path: /spec/template/spec/affinity
         value:
-          - key: "node.kubernetes.io/role"
-            operator: "Equal"
-            value: "production"
-            effect: "NoSchedule"
-          - key: "CriticalAddonsOnly"
-            operator: "Equal"
-            value: "true"
-            effect: "NoExecute"
-      - op: add
-        path: /spec/template/spec/nodeSelector
-        value:
-          node.kubernetes.io/role: production
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                  - beverley
     target:
       kind: Deployment
       name: ict
