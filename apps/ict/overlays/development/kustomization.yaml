@@ -12,6 +12,21 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Always
+      - op: add
+        path: /spec/template/spec/tolerations
+        value:
+          - key: "node.kubernetes.io/role"
+            operator: "Equal"
+            value: "production"
+            effect: "NoSchedule"
+          - key: "CriticalAddonsOnly"
+            operator: "Equal"
+            value: "true"
+            effect: "NoExecute"
+      - op: add
+        path: /spec/template/spec/nodeSelector
+        value:
+          node.kubernetes.io/role: production
     target:
       kind: Deployment
       name: ict
