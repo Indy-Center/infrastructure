@@ -18,9 +18,8 @@ spec:
           key: ACCESS_SECRET_KEY
     retentionPolicy: "90d"  # Longer retention for production
 
-  bootstrap:
-    recovery:
-      source: ict-db
+  externalClusters:
+    - name: ict-db
       barmanObjectStore:
         destinationPath: "s3://indy-db-backups-development"
         endpointURL: "https://s3.amazonaws.com"
@@ -30,4 +29,8 @@ spec:
             key: ACCESS_KEY_ID
           secretAccessKey:
             name: aws-creds
-            key: ACCESS_SECRET_KEY 
+            key: ACCESS_SECRET_KEY
+
+  bootstrap:
+    recovery:
+      source: ict-db 
