@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ict
+  namespace: production
 spec:
   replicas: 2
   template:
@@ -18,7 +19,7 @@ spec:
         resources:
           requests:
             cpu: 100m       # ~1.5-2x your average usage
-            memory: 512Mi  # Slightly above your average memory usage
+            memory: 256Mi  # Slightly above your average memory usage
           limits:
             cpu: 500m      # Allowing room for CPU spikes; adjust if needed
             memory: 1Gi  # Providing headroom for memory spikes 
