@@ -6,8 +6,4 @@ metadata:
 data:
   policy.default: role:readonly
   policy.csv: |
-    g, Indy-Center:devops-team, role:admin
-    p, role:developer, applications, get, apps/*, allow
-    p, role:developer, applications, sync, apps/*, allow
-    p, role:developer, projects, get, apps, allow
-    g, Indy-Center:developers, role:developer 
+    g, Indy-Center:devops-team, role:admin 

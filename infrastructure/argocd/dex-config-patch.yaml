@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: Ov23liYfhCi1zJHD3yYE
+          clientSecret: $dex.github.clientSecret
+          useLoginAsID: true
+          loadAllGroups: true
+          orgs:
+          - name: Indy-Center
+            teams:
+            - devops-team
+          scopes:
+            - user:email
+            - read:org 

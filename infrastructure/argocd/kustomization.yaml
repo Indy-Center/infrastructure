@@ -6,6 +6,7 @@ resources:
   - https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/v0.12.2/manifests/install.yaml
   - ingress-route.yaml
   - certificate.yaml
+  - argocd-secret-sealed.yaml
 
 patches:
   - path: cmd-params-cm-patch.yaml
@@ -16,6 +17,14 @@ patches:
     target:
       kind: ConfigMap
       name: argocd-cm
+  - path: dex-config-patch.yaml
+    target:
+      kind: ConfigMap
+      name: argocd-cm
+  - path: rbac-cm-patch.yaml
+    target:
+      kind: ConfigMap
+      name: argocd-rbac-cm
   - path: image-updater-cm-patch.yaml
     target:
       kind: ConfigMap
