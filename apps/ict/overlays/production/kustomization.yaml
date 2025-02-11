@@ -8,7 +8,57 @@ resources:
   - sealed-ict-secret.yaml
 
 patches:
-  - path: postgres-patch.yaml
+  # First remove the existing bootstrap and externalClusters
+  - patch: |-
+      - op: remove
+        path: /spec/bootstrap
+      - op: remove
+        path: /spec/externalClusters
+    target:
+      kind: Cluster
+      name: ict-db
+
+  # Then add our new configuration with AWS credentials
+  - patch: |-
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      metadata:
+        name: ict-db
+      spec:
+        instances: 2
+        backup:
+          barmanObjectStore:
+            destinationPath: "s3://indy-db-backups-production"
+            endpointURL: "https://s3.amazonaws.com"
+            serverName: "ict-db"
+            s3Credentials:
+              accessKeyId:
+                name: aws-creds
+                key: ACCESS_KEY_ID
+              secretAccessKey:
+                name: aws-creds
+                key: ACCESS_SECRET_KEY
+          retentionPolicy: "90d"
+        bootstrap:
+          recovery:
+            source: clusterBackup
+            database: ict
+            owner: ict
+        externalClusters:
+          - name: clusterBackup
+            barmanObjectStore:
+              destinationPath: "s3://indy-db-backups-production"
+              endpointURL: "https://s3.amazonaws.com"
+              serverName: "ict-db"
+              s3Credentials:
+                accessKeyId:
+                  name: aws-creds
+                  key: ACCESS_KEY_ID
+                secretAccessKey:
+                  name: aws-creds
+                  key: ACCESS_SECRET_KEY
+              wal:
+                maxParallel: 8
     target:
       kind: Cluster
       name: ict-db

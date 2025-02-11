@@ -5,4 +5,5 @@ resources:
   - ghcr-secret.yaml
   - ghcr-secret-development.yaml
   - ghcr-secret-production.yaml
-  - aws-creds.yaml 
+  - aws-creds-development.yaml
+  - aws-creds-production.yaml 
