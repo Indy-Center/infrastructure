@@ -35,4 +35,8 @@ spec:
   bootstrap:
     $patch: replace
     recovery:
-      source: ict-db 
+      source: ict-db
+      recoveryTarget:
+        targetTime: "2025-02-11 17:00:00.000000+00"  # Restore to a point in time before the migration
+      database: ict  # The database to restore
+      owner: ict     # The database owner 
