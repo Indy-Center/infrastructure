@@ -6,6 +6,14 @@ namespace: monitoring
 resources:
   - namespace.yaml
   - prometheus.yaml
+  - loki.yaml
   - grafana-oauth-sealed.yaml
   - ingress-route.yaml
-  - loki.yaml 
+  - alertmanager-discord-sealed.yaml
+
+configMapGenerator:
+  - name: alertmanager-config
+    options:
+      disableNameSuffixHash: true
+    files:
+      - alertmanager.yaml 

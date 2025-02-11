@@ -9,10 +9,89 @@ spec:
   version: "69.2.0"
   targetNamespace: monitoring
   valuesContent: |-
+    # Global settings for all components
+    global:
+      nodeSelector:
+        node.kubernetes.io/role: ops
+      tolerations:
+        - key: "node.kubernetes.io/role"
+          operator: "Equal"
+          value: "ops"
+          effect: "NoSchedule"
+
+    # Component specific settings
+    prometheusOperator:
+      nodeSelector:
+        node.kubernetes.io/role: ops
+      tolerations:
+        - key: "node.kubernetes.io/role"
+          operator: "Equal"
+          value: "ops"
+          effect: "NoSchedule"
+
+    prometheus:
+      ingress:
+        enabled: false
+      prometheusSpec:
+        nodeSelector:
+          node.kubernetes.io/role: ops
+        tolerations:
+          - key: "node.kubernetes.io/role"
+            operator: "Equal"
+            value: "ops"
+            effect: "NoSchedule"
+
+    alertmanager:
+      ingress:
+        enabled: false
+      alertmanagerSpec:
+        nodeSelector:
+          node.kubernetes.io/role: ops
+        tolerations:
+          - key: "node.kubernetes.io/role"
+            operator: "Equal"
+            value: "ops"
+            effect: "NoSchedule"
+
     grafana:
       ingress:
         enabled: false
+      nodeSelector:
+        node.kubernetes.io/role: ops
+      tolerations:
+        - key: "node.kubernetes.io/role"
+          operator: "Equal"
+          value: "ops"
+          effect: "NoSchedule"
       envFromSecret: grafana-oauth
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: Prometheus
+              type: prometheus
+              url: http://kube-prometheus-stack-prometheus:9090
+              access: proxy
+              isDefault: true
+              jsonData:
+                timeInterval: "30s"
+            - name: Loki
+              type: loki
+              url: http://loki:3100
+              access: proxy
+              isDefault: false
+              jsonData:
+                maxLines: 1000
+                timeout: 60
+                liveEnabled: true
+                alertmanager:
+                  implementation: "cortex"
+                nodeGraph:
+                  enabled: true
+                search:
+                  hide: false
+                showVolume: true
+                volumeQuery: '{container!=""}'
       grafana.ini:
         server:
           root_url: https://metrics.zid-internal.com
@@ -32,9 +111,201 @@ spec:
         users:
           auto_assign_org_role: Admin
           auto_assign_org: true
-    prometheus:
-      ingress:
-        enabled: false
-    alertmanager:
-      ingress:
-        enabled: false 
+
+    # Loki stack configuration
+    loki:
+      enabled: true
+      isDefault: false
+      auth_enabled: false
+      mode: single
+      persistence:
+        enabled: true
+        size: 10Gi
+      serviceMonitor:
+        enabled: true
+      monitoring:
+        selfMonitoring:
+          enabled: true
+          grafanaAgent:
+            installOperator: false
+        lokiCanary:
+          enabled: true
+      nodeSelector:
+        node.kubernetes.io/role: ops
+      tolerations:
+        - key: "node.kubernetes.io/role"
+          operator: "Equal"
+          value: "ops"
+          effect: "NoSchedule"
+
+    # Promtail configuration
+    promtail:
+      enabled: true
+      config:
+        snippets:
+          scrapeConfigs: |
+            - job_name: kubernetes-pods
+              kubernetes_sd_configs:
+                - role: pod
+              relabel_configs:
+                - source_labels:
+                    - __meta_kubernetes_pod_controller_name
+                  regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
+                  target_label: __service__
+                - source_labels:
+                    - __meta_kubernetes_pod_label_app_kubernetes_io_name
+                    - __meta_kubernetes_pod_label_app
+                    - __service__
+                  regex: ^(?:(.+)|(.*)|(.+))$
+                  target_label: service_name
+                - source_labels:
+                    - __meta_kubernetes_namespace
+                  target_label: namespace
+                - source_labels:
+                    - __meta_kubernetes_pod_name
+                  target_label: pod
+                - source_labels:
+                    - __meta_kubernetes_pod_container_name
+                  target_label: container
+                - action: replace
+                  source_labels:
+                    - __meta_kubernetes_pod_node_name
+                  target_label: node_name
+                - action: labelmap
+                  regex: __meta_kubernetes_pod_label_(.+)
+                - action: replace
+                  replacement: $1
+                  separator: /
+                  source_labels:
+                    - __meta_kubernetes_namespace
+                    - __service__
+                  target_label: job
+                - action: replace
+                  source_labels:
+                    - __meta_kubernetes_namespace
+                  target_label: namespace
+                - action: replace
+                  source_labels:
+                    - __meta_kubernetes_pod_name
+                  target_label: pod
+                - action: replace
+                  source_labels:
+                    - __meta_kubernetes_pod_container_name
+                  target_label: container
+                - replacement: /var/log/pods/*$1/*.log
+                  separator: /
+                  source_labels:
+                    - __meta_kubernetes_pod_uid
+                    - __meta_kubernetes_pod_container_name
+                  target_label: __path__
+        clients:
+          - url: http://loki:3100/loki/api/v1/push
+            tenant_id: "1"
+      nodeSelector:
+        node.kubernetes.io/role: ops
+      tolerations:
+        - key: "node.kubernetes.io/role"
+          operator: "Equal"
+          value: "ops"
+          effect: "NoSchedule"
+
+    additionalPrometheusRulesMap:
+      alert-rules:
+        groups:
+          - name: NodeAlerts
+            rules:
+              - alert: NodeNotReady
+                expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  title: '🔥 Node {{ $labels.node }} Not Ready'
+                  description: 'Node {{ $labels.node }} has been unready for more than 5 minutes'
+                  runbook: 'Check node status and kubelet service'
+
+              - alert: HighNodeCPU
+                expr: instance:node_cpu_utilisation:rate5m * 100 > 85
+                for: 10m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '⚠️ High CPU Usage on {{ $labels.instance }}'
+                  description: 'Node {{ $labels.instance }} CPU usage is above 85% for more than 10 minutes'
+                  runbook: 'Check system processes and consider scaling'
+
+              - alert: HighNodeMemory
+                expr: instance:node_memory_utilisation:ratio * 100 > 85
+                for: 10m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '⚠️ High Memory Usage on {{ $labels.instance }}'
+                  description: 'Node {{ $labels.instance }} memory usage is above 85% for more than 10 minutes'
+                  runbook: 'Check memory-heavy processes and consider scaling'
+
+              - alert: LowDiskSpace
+                expr: node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} * 100 < 10
+                for: 5m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '💾 Low Disk Space on {{ $labels.instance }}'
+                  description: 'Node {{ $labels.instance }} has less than 10% free disk space'
+                  runbook: 'Clean up disk space or expand storage'
+
+          - name: KubernetesAlerts
+            rules:
+              - alert: KubePodCrashLooping
+                expr: rate(kube_pod_container_status_restarts_total[15m]) * 60 * 5 > 0
+                for: 15m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '🔄 Pod Crash Looping: {{ $labels.namespace }}/{{ $labels.pod }}'
+                  description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping'
+                  runbook: 'Check pod logs and events'
+
+              - alert: KubePodPending
+                expr: kube_pod_status_phase{phase="Pending"} == 1
+                for: 15m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '⏳ Pod Stuck Pending: {{ $labels.namespace }}/{{ $labels.pod }}'
+                  description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} has been pending for more than 15 minutes'
+                  runbook: 'Check pod events and resource constraints'
+
+          - name: ControlPlaneAlerts
+            rules:
+              - alert: KubeAPIDown
+                expr: up{job="apiserver"} == 0
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  title: '🚨 Kubernetes API Unreachable'
+                  description: 'Kubernetes API is unreachable'
+                  runbook: 'Check control plane components and API server logs'
+
+              - alert: EtcdHighCommitDuration
+                expr: histogram_quantile(0.99, rate(etcd_disk_backend_commit_duration_seconds_bucket[5m])) > 0.5
+                for: 10m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '⚡ Etcd High Commit Duration'
+                  description: 'Etcd 99th percentile commit duration is too high'
+                  runbook: 'Check etcd performance and disk I/O'
+
+          - name: ResourceAlerts
+            rules:
+              - alert: PersistentVolumeUsageHigh
+                expr: kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes * 100 > 85
+                for: 5m
+                labels:
+                  severity: warning
+                annotations:
+                  title: '📊 High PVC Usage: {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}'
+                  description: 'PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} is using more than 85% of its capacity'
+                  runbook: 'Consider expanding PVC or cleaning up data' 

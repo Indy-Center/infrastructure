@@ -11,6 +11,9 @@ data:
     - name: Content-Type
       value: application/json
   
+  # Secret reference
+  secret.discord.discord-webhook-token: argocd-notifications-secret:discord-webhook-token
+  
   # Trigger definitions
   trigger.on-deployed: |
     - when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'

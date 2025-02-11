@@ -1,19 +1,25 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: grafana
   namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`metrics.zid-internal.com`)
-      kind: Rule
-      services:
-        - name: kube-prometheus-stack-grafana
-          port: 80
   tls:
-    secretName: metrics-tls
-    domains:
-      - main: metrics.zid-internal.com
-    certResolver: le 
+    - hosts:
+        - metrics.zid-internal.com
+      secretName: metrics-tls
+  rules:
+    - host: metrics.zid-internal.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kube-prometheus-stack-grafana
+                port:
+                  number: 80 

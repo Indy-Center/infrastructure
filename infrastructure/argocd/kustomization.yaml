@@ -7,6 +7,7 @@ resources:
   - ingress-route.yaml
   - certificate.yaml
   - argocd-secret-sealed.yaml
+  - notifications-secret-sealed.yaml
 
 patches:
   - path: cmd-params-cm-patch.yaml
@@ -37,3 +38,13 @@ patches:
     target:
       kind: ConfigMap
       name: argocd-notifications-cm
+  # Remove the default notifications secret
+  - patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: argocd-notifications-secret
+    target:
+      kind: Secret
+      name: argocd-notifications-secret
