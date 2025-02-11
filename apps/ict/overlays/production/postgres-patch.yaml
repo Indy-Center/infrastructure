@@ -8,4 +8,26 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: "s3://indy-db-backups-production"  # Different bucket for production
-    retentionPolicy: "90d"  # Longer retention for production 
+      endpointURL: "https://s3.amazonaws.com"
+      s3Credentials:
+        accessKeyId:
+          name: aws-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: aws-creds
+          key: ACCESS_SECRET_KEY
+    retentionPolicy: "90d"  # Longer retention for production
+
+  bootstrap:
+    recovery:
+      source: ict-db
+      barmanObjectStore:
+        destinationPath: "s3://indy-db-backups-development"
+        endpointURL: "https://s3.amazonaws.com"
+        s3Credentials:
+          accessKeyId:
+            name: aws-creds
+            key: ACCESS_KEY_ID
+          secretAccessKey:
+            name: aws-creds
+            key: ACCESS_SECRET_KEY 

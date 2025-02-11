@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - ghcr-secret.yaml
   - ghcr-secret-development.yaml
-  - ghcr-secret-production.yaml 
+  - ghcr-secret-production.yaml
+  - aws-creds.yaml 
