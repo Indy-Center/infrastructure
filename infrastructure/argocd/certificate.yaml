@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: argocd-server-tls
   dnsNames:
-    - argocd.dev.zid-internal.com
+    - argocd.zid-internal.com
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer 

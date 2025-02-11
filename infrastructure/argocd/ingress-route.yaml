@@ -8,13 +8,14 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`argocd.dev.zid-internal.com`)
+      match: Host(`argocd.zid-internal.com`)
       priority: 10
       services:
         - name: argocd-server
           port: 80
+          passHostHeader: true
     - kind: Rule
-      match: Host(`argocd.dev.zid-internal.com`) && HeadersRegexp(`Content-Type`, `application/grpc`)
+      match: Host(`argocd.zid-internal.com`) && HeadersRegexp(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
