@@ -3,5 +3,7 @@ kind: Kustomization
 
 resources:
   - ghcr-secret.yaml
+  - ghcr-secret-development.yaml
+  - ghcr-secret-production.yaml
 
 namespace: default 
