@@ -31,6 +31,8 @@ spec:
             name: aws-creds
             key: ACCESS_SECRET_KEY
 
+  # Replace the entire bootstrap configuration
   bootstrap:
+    $patch: replace
     recovery:
       source: ict-db 
