@@ -4,6 +4,19 @@ metadata:
   name: argocd-rbac-cm
   namespace: argocd
 data:
-  policy.default: role:readonly
   policy.csv: |
-    g, Indy-Center:devops-team, role:admin 
+    # DevOps Team - Full Access
+    g, Indy-Center:devops, role:admin 
+
+    # Developers - Restricted Access
+    g, Indy-Center:developers, role:developers
+
+    # Custom developers role - only access to apps/*
+    p, role:developers, applications, get, apps/*, allow
+    p, role:developers, applications, list, apps/*, allow
+    p, role:developers, applications, sync, apps/*, allow
+
+    # Explicitly deny access to infrastructure
+    p, role:developers, applications, get, infrastructure/*, deny
+    p, role:developers, applications, sync, infrastructure/*, deny
+    p, role:developers, applications, update, infrastructure/*, deny

@@ -7,9 +7,6 @@ spec:
   valuesContent: |-
     ports:
       web:
-        redirectTo: websecure
-    # This ensures all HTTP traffic is redirected to HTTPS globally
-    globalArguments:
-      - "--entrypoints.web.http.redirections.entryPoint.to=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true" 
+        redirectTo:
+          port: websecure
+          permanent: true 

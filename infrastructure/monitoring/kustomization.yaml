@@ -6,7 +6,6 @@ namespace: monitoring
 resources:
   - namespace.yaml
   - prometheus.yaml
-  - loki.yaml
   - grafana-oauth-sealed.yaml
   - ingress-route.yaml
   - alertmanager-discord-sealed.yaml

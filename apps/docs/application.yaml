@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: integrated-controller-tools.dev
+  name: docs.zid-internal.com
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: ict=ghcr.io/indy-center/controller-tools
-    argocd-image-updater.argoproj.io/ict.pull-secret: pullsecret:argocd/ghcr-secret
-    argocd-image-updater.argoproj.io/ict.update-strategy: latest
+    argocd-image-updater.argoproj.io/image-list: docs=ghcr.io/indy-center/docs
+    argocd-image-updater.argoproj.io/docs.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/docs.update-strategy: latest
     notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
     notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
     notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: https://github.com/indy-center/infrastructure.git
     targetRevision: HEAD
-    path: apps/ict/overlays/development
+    path: apps/docs
   destination:
     server: https://kubernetes.default.svc
     namespace: development

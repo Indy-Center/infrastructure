@@ -17,7 +17,8 @@ data:
           orgs:
           - name: Indy-Center
             teams:
-            - devops-team
+            - developers
+            - devops
           scopes:
             - user:email
             - read:org 
