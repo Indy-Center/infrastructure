@@ -48,3 +48,29 @@ patches:
     target:
       kind: Secret
       name: argocd-notifications-secret
+  # Add node affinity for ArgoCD components
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: all
+      spec:
+        template:
+          spec:
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: node.kubernetes.io/role
+                          operator: In
+                          values:
+                            - ops
+            tolerations:
+              - key: "node.kubernetes.io/role"
+                operator: "Equal"
+                value: "ops"
+                effect: "NoSchedule"
+    target:
+      kind: Deployment
+      labelSelector: "app.kubernetes.io/part-of=argocd"
