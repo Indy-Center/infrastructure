@@ -8,3 +8,11 @@ resources:
   - prometheus.yaml
   - grafana-oauth-sealed.yaml
   - ingress-route.yaml
+  - alertmanager-discord-sealed.yaml
+
+configMapGenerator:
+  - name: alertmanager-templates
+    files:
+      - discord.tmpl
+    options:
+      disableNameSuffixHash: true

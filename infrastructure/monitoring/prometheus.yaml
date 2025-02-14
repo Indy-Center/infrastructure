@@ -9,6 +9,26 @@ spec:
   version: "69.2.0"
   targetNamespace: monitoring
   valuesContent: |-
+    defaultRules:
+      create: true
+      rules:
+        etcd: false  # We don't need etcd rules since we're using k3s
+        kubernetesSystem: true
+        kubernetesApps: true
+        kubernetesResources: true
+        kubernetesStorage: true
+        network: true
+        time: true
+
+    kubeControllerManager:
+      enabled: false  # Disabled since it's embedded in k3s
+
+    kubeScheduler:
+      enabled: false  # Disabled since it's embedded in k3s
+
+    kubeProxy:
+      enabled: false  # Disabled since it's embedded in k3s
+
     prometheus:
       ingress:
         enabled: false
@@ -20,6 +40,88 @@ spec:
             operator: "Equal"
             value: "ops"
             effect: "NoSchedule"
+        scrapeInterval: "30s"
+        evaluationInterval: "30s"
+        scrapeTimeout: "20s"
+        retention: "30d"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+
+    nodeExporter:
+      enabled: true
+      tolerations:
+        - operator: "Exists"
+      serviceMonitor:
+        relabelings:
+          - action: replace
+            regex: (.*)
+            replacement: $1
+            sourceLabels:
+              - __meta_kubernetes_pod_node_name
+            targetLabel: instance
+        scrapeTimeout: "20s"
+
+    alertmanager:
+      enabled: true
+      alertmanagerSpec:
+        nodeSelector:
+          node.kubernetes.io/role: ops
+        tolerations:
+          - key: "node.kubernetes.io/role"
+            operator: "Equal"
+            value: "ops"
+            effect: "NoSchedule"
+        retention: "120h"
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "200Mi"
+            cpu: "200m"
+        configSecret: alertmanager-discord
+        volumes:
+          - name: discord-template
+            configMap:
+              name: alertmanager-templates
+        volumeMounts:
+          - name: discord-template
+            mountPath: /etc/alertmanager/discord-templates
+            readOnly: true
+      config:
+        global:
+          resolve_timeout: 5m
+        route:
+          group_by: ['alertname', 'job']
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 12h
+          receiver: 'discord'
+          routes:
+            - receiver: 'null'
+              matchers:
+                - alertname =~ "InfoInhibitor|Watchdog"
+            - receiver: 'discord'
+              matchers:
+                - severity =~ "warning|critical"
+              continue: true
+        receivers:
+          - name: 'null'
+          - name: 'discord'
+            discord_configs:
+              - webhook_url: __WEBHOOK_URL__
+                title: '{{ template "discord.default.title" . }}'
+                message: '{{ template "discord.default.message" . }}'
+        templates:
+          - '/etc/alertmanager/discord-templates/*.tmpl'
+
+    kubeStateMetrics:
+      enabled: true
 
     grafana:
       ingress:
@@ -47,3 +149,10 @@ spec:
           client_id: ${GF_AUTH_GITHUB_CLIENT_ID}
           client_secret: ${GF_AUTH_GITHUB_CLIENT_SECRET}
           role_attribute_path: contains(groups[*], '@Indy-Center/devops') && 'GrafanaAdmin' || contains(groups[*], '@Indy-Center/developers') && 'Editor' || 'None'
+      resources:
+        requests:
+          memory: "100Mi"
+          cpu: "100m"
+        limits:
+          memory: "200Mi"
+          cpu: "200m"
