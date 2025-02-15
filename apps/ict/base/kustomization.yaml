@@ -7,3 +7,6 @@ resources:
   - ingress.yaml
   - db-cluster.yaml
   - scheduled-backup.yaml
+  - backup-config.yaml
+
+namespace: ict

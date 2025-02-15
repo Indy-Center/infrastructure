@@ -4,4 +4,6 @@ cloudnative-pg:
   
   # Enable monitoring if you have Prometheus installed
   monitoring:
-    enablePodMonitor: false 
+    enableServiceMonitor: true
+    serviceMonitor:
+      interval: 30s 

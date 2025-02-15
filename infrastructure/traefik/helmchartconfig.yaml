@@ -3,10 +3,13 @@ kind: HelmChartConfig
 metadata:
   name: traefik
   namespace: kube-system
+  labels:
+    argocd.argoproj.io/instance: traefik
 spec:
   valuesContent: |-
-    ports:
-      web:
-        redirectTo:
-          port: websecure
-          permanent: true 
+    additionalArguments:
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.addEntryPointsLabels=true"
+      - "--metrics.prometheus.addServicesLabels=true"
+      - "--entryPoints.metrics.address=:9100"
+      - "--metrics.prometheus.entryPoint=metrics" 

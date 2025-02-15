@@ -9,6 +9,9 @@ resources:
   - grafana-oauth-sealed.yaml
   - ingress-route.yaml
   - alertmanager-discord-sealed.yaml
+  - grafana-dashboards.yaml
+  - cnpg-monitor.yaml
+  - traefik-monitor.yaml
 
 configMapGenerator:
   - name: alertmanager-templates
