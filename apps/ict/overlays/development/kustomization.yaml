@@ -9,6 +9,22 @@ namespace: development
 
 patches:
   - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/valueFrom/secretKeyRef/name
+        value: ict-db-app-prod
+    target:
+      kind: Deployment
+      name: ict
+
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/envFrom/1/secretRef/name
+        value: ict-db-app-prod
+    target:
+      kind: Deployment
+      name: ict
+
+  - patch: |-
       - op: add
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Always
