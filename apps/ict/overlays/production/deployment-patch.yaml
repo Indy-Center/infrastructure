@@ -18,8 +18,8 @@ spec:
             value: "1546"
         resources:
           requests:
-            cpu: 100m       # ~1.5-2x your average usage
-            memory: 256Mi  # Slightly above your average memory usage
+            cpu: 500m       # ~1.5-2x your average usage
+            memory: 512Mi  # Slightly above your average memory usage
           limits:
-            cpu: 500m      # Allowing room for CPU spikes; adjust if needed
+            cpu: 1000m      # Allowing room for CPU spikes; adjust if needed
             memory: 1Gi  # Providing headroom for memory spikes 
