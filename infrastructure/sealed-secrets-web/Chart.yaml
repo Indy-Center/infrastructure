@@ -1,0 +1,10 @@
+apiVersion: v2
+name: sealed-secrets-ui
+description: A helm chart for deploying the Sealed Secets Web
+type: application
+version: "3.1.6"
+appVersion: "3.1.6"
+dependencies:
+  - name: sealed-secrets-web
+    version: "3.1.6"
+    repository: "https://charts.bakito.net"

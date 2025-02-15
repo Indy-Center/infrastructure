@@ -1,0 +1,9 @@
+sealed-secrets-web:
+  deployment:
+    args:
+      defaultArgsEnabled: true
+      additionalArgs:
+      - --sealed-secrets-service-namespace=kube-system
+      - --sealed-secrets-service-name=sealed-secrets-controller
+
+  disableLoadSecrets: true
