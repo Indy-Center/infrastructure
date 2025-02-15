@@ -8,6 +8,16 @@ resources:
 namespace: development
 
 patches:
+  # Set replicas to 2
+  - patch: |-
+      - op: add
+        path: /spec/replicas
+        value: 2
+    target:
+      kind: Deployment
+      name: ict
+
+  # Database secret patches
   - patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/0/valueFrom/secretKeyRef/name
@@ -24,25 +34,41 @@ patches:
       kind: Deployment
       name: ict
 
+  # Environment variables from deployment patch
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/1/value
+        value: "https://tools.next.zidartcc.org/login/connect/callback"
+      - op: replace
+        path: /spec/template/spec/containers/0/env/2/value
+        value: "https://auth.vatsim.net"
+      - op: replace
+        path: /spec/template/spec/containers/0/env/3/value
+        value: "1566"
+    target:
+      kind: Deployment
+      name: ict
+
+  # Resource configuration from deployment patch
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 750m
+            memory: 1Gi
+    target:
+      kind: Deployment
+      name: ict
+
+  # Image pull policy
   - patch: |-
       - op: add
         path: /spec/template/spec/containers/0/imagePullPolicy
         value: Always
-    target:
-      kind: Deployment
-      name: ict
-  - patch: |-
-      - op: add
-        path: /spec/template/spec/affinity
-        value:
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-              - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                  - beverley
     target:
       kind: Deployment
       name: ict
