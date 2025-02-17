@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vatsim-data
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  tls:
+    - hosts:
+        - vatsim-data.zid-internal.com
+      secretName: vatsim-data-tls
+  rules:
+    - host: vatsim-data.zid-internal.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vatsim-data
+                port:
+                  number: 80 
+    - host: vatsim-data.zid-internal.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vatsim-data
+                port:
+                  number: 80 
