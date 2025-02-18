@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vatsim-data-db-rw
+  namespace: development
+  annotations:
+    tailscale.com/expose: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ict-db-rw
+  namespace: development
+  annotations:
+    tailscale.com/expose: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ict-db-rw
+  namespace: production
+  annotations:
+    tailscale.com/expose: "true"

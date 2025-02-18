@@ -8,3 +8,4 @@ resources:
   - service.yaml
   - ingress.yaml 
   - db-cluster.yaml
+  - db-service.yaml
