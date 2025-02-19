@@ -1,14 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: vatsim-data.zid-internal.com
+  name: vatsim-data-ingestor.dev
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: vatsim-data-api=ghcr.io/indy-center/vatsim-data-api,vatsim-data-ingest=ghcr.io/indy-center/vatsim-data-ingest
-    argocd-image-updater.argoproj.io/vatsim-data-api.pull-secret: pullsecret:argocd/ghcr-secret
-    argocd-image-updater.argoproj.io/vatsim-data-api.update-strategy: latest
-    argocd-image-updater.argoproj.io/vatsim-data-ingest.pull-secret: pullsecret:argocd/ghcr-secret
-    argocd-image-updater.argoproj.io/vatsim-data-ingest.update-strategy: latest
+    argocd-image-updater.argoproj.io/image-list: vatsim-data-ingestor=ghcr.io/indy-center/vatsim-data
+    argocd-image-updater.argoproj.io/vatsim-data-ingestor.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/vatsim-data-ingestor.update-strategy: latest
     notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
     notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
     notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
@@ -17,7 +15,7 @@ spec:
   source:
     repoURL: https://github.com/indy-center/infrastructure.git
     targetRevision: HEAD
-    path: apps/vatsim-data
+    path: apps/vatsim-data-ingestor
   destination:
     server: https://kubernetes.default.svc
     namespace: development

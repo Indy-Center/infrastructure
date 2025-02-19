@@ -6,6 +6,3 @@ namespace: development
 resources:
   - deployment.yaml
   - service.yaml
-  - ingress.yaml 
-  - db-cluster.yaml
-  - db-service.yaml
