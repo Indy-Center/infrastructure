@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vatsim-data-event-processor
+spec:
+  selector:
+    matchLabels:
+      app: vatsim-data-event-processor
+  template:
+    metadata:
+      labels:
+        app: vatsim-data-event-processor
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: vatsim-data-event-processor
+        image: ghcr.io/indy-center/vatsim-data-event-processor:latest
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m 
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+        env:
+          - name: LOG_LEVEL
+            value: debug
+        envFrom:
+          - secretRef:
+              name: vatsim-data-event-processor-secret

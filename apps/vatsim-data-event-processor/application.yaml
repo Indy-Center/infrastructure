@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vatsim-data-event-processor.dev
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: vatsim-data-event-processor=ghcr.io/indy-center/vatsim-data-event-processor
+    argocd-image-updater.argoproj.io/vatsim-data-event-processor.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/vatsim-data-event-processor.update-strategy: latest
+    notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
+    notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
+    notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
+spec:
+  project: apps
+  source:
+    repoURL: https://github.com/indy-center/infrastructure.git
+    targetRevision: HEAD
+    path: apps/vatsim-data-event-processor
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: development
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true 
