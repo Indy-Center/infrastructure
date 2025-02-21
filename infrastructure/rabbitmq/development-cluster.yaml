@@ -1,0 +1,25 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: development
+spec:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 2048Mi
+    limits:
+      cpu: 500m
+      memory: 2048Mi
+  persistence:
+    storage: 1Gi
+  rabbitmq:
+    additionalConfig: |
+      total_memory_available_override_value = 2048MB
+      vm_memory_high_watermark.relative = 0.8
+  service:
+    type: ClusterIP
+    annotations:
+      tailscale.com/expose: "true"
+  tls: {}
+  

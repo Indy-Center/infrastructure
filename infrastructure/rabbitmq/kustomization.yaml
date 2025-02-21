@@ -3,8 +3,9 @@ kind: Kustomization
 
 resources:
   - https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml
+  - development-cluster.yaml
 
-namespace: kube-system
+namespace: rabbitmq
 
 # Optional: Add common labels
 commonLabels:
