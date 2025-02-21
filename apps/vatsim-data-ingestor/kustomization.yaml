@@ -6,3 +6,4 @@ namespace: development
 resources:
   - deployment.yaml
   - service.yaml
+  - secret-sealed.yaml
