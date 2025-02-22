@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vatsim-activity.dev
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: vatsim-activity=ghcr.io/indy-center/vatsim-activity
+    argocd-image-updater.argoproj.io/vatsim-activity.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/vatsim-data-event-processor.update-strategy: latest
+    notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
+    notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
+    notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
+spec:
+  project: apps
+  source:
+    repoURL: https://github.com/indy-center/infrastructure.git
+    targetRevision: HEAD
+    path: apps/vatsim-activity
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: development
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true 
