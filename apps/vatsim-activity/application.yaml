@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd-image-updater.argoproj.io/image-list: vatsim-activity=ghcr.io/indy-center/vatsim-activity
     argocd-image-updater.argoproj.io/vatsim-activity.pull-secret: pullsecret:argocd/ghcr-secret
-    argocd-image-updater.argoproj.io/vatsim-data-event-processor.update-strategy: latest
+    argocd-image-updater.argoproj.io/vatsim-activity.update-strategy: latest
     notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
     notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
     notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
