@@ -29,6 +29,9 @@ spec:
         env:
           - name: LOG_LEVEL
             value: debug
+          - name: REDIS_URL
+            value: "redis://default@vatsim-data-event-processor-redis:6379"
         envFrom:
           - secretRef:
               name: vatsim-data-event-processor-secret
+

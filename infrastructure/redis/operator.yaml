@@ -1,0 +1,24 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: redis-operator
+  namespace: redis
+spec:
+  repo: https://spotahome.github.io/redis-operator
+  chart: redis-operator
+  version: "3.2.9"
+  targetNamespace: redis
+  valuesContent: |-
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    watchAllNamespaces: true
+    redis:
+      storage:
+        storageClassName: local-path
+      exporter:
+        enabled: true 

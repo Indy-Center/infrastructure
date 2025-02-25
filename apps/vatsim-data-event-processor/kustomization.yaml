@@ -6,3 +6,4 @@ namespace: development
 resources:
   - deployment.yaml
   - secret-sealed.yaml
+  - redis.yaml
