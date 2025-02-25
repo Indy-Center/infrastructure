@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flight-plan-manager.dev
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: flight-plan-manager=ghcr.io/indy-center/flight-plan-manager
+    argocd-image-updater.argoproj.io/flight-plan-manager.pull-secret: pullsecret:argocd/ghcr-secret
+    argocd-image-updater.argoproj.io/flight-plan-manager.update-strategy: latest
+    notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""
+    notifications.argoproj.io/subscribe.on-sync-failed.discord: ""
+    notifications.argoproj.io/subscribe.on-health-degraded.discord: ""
+spec:
+  project: apps
+  source:
+    repoURL: https://github.com/indy-center/infrastructure.git
+    targetRevision: HEAD
+    path: apps/flight-plan-manager
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: development
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true 

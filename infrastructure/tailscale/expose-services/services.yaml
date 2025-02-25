@@ -13,3 +13,11 @@ metadata:
   namespace: production
   annotations:
     tailscale.com/expose: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flight-plan-manager-db-rw
+  namespace: development
+  annotations:
+    tailscale.com/expose: "true"
