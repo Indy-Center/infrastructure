@@ -38,7 +38,7 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/1/value
-        value: "https://tools.next.zidartcc.org/login/connect/callback"
+        value: "https://tools.next.flyindycenter.com/login/connect/callback"
       - op: replace
         path: /spec/template/spec/containers/0/env/2/value
         value: "https://auth.vatsim.net"

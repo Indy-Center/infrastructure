@@ -26,7 +26,7 @@ spec:
           patch: |-
             - op: replace
               path: /spec/rules/0/host
-              value: tools.zidartcc.org
+              value: tools.flyindycenter.com
   destination:
     server: https://kubernetes.default.svc
     namespace: production

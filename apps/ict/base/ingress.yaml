@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts:
         - tools.dev.zid-internal.com
-        - tools.next.zidartcc.org
+        - tools.next.flyindycenter.com
       secretName: ict-tls
   rules:
     - host: tools.dev.zid-internal.com
@@ -22,7 +22,7 @@ spec:
                 name: ict
                 port:
                   number: 80 
-    - host: tools.next.zidartcc.org
+    - host: tools.next.flyindycenter.com
       http:
         paths:
           - path: /

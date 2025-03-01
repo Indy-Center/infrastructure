@@ -5,10 +5,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - tools.zidartcc.org
+        - tools.flyindycenter.com
       secretName: ict-prod-tls
   rules:
-    - host: tools.zidartcc.org
+    - host: tools.flyindycenter.com
       http:
         paths:
           - path: /
