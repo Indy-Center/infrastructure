@@ -4,7 +4,7 @@ metadata:
   name: vatsim-data-ingestor.dev
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: vatsim-data-ingestor=ghcr.io/indy-center/vatsim-data
+    argocd-image-updater.argoproj.io/image-list: vatsim-data-ingestor=ghcr.io/indy-center/vatsim-data-ingestor
     argocd-image-updater.argoproj.io/vatsim-data-ingestor.pull-secret: pullsecret:argocd/ghcr-secret
     argocd-image-updater.argoproj.io/vatsim-data-ingestor.update-strategy: latest
     notifications.argoproj.io/subscribe.on-sync-succeeded.discord: ""

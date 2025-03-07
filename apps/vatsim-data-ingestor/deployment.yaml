@@ -15,7 +15,7 @@ spec:
         - name: ghcr-secret
       containers:
       - name: vatsim-data-ingestor
-        image: ghcr.io/indy-center/vatsim-data:latest
+        image: ghcr.io/indy-center/vatsim-data-ingestor:latest
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -32,7 +32,7 @@ spec:
           - name: REFRESH_INTERVAL_MS
             value: "15000"
           - name: LOG_LEVEL
-            value: debug
+            value: info
         envFrom:
           - secretRef:
               name: vatsim-data-ingestor-secret
