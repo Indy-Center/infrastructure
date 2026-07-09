@@ -40,7 +40,7 @@ spec:
               name: ict-db-app
         startupProbe:
           httpGet:
-            path: /
+            path: /healthz
             port: 3000
           initialDelaySeconds: 15
           failureThreshold: 60
@@ -48,14 +48,14 @@ spec:
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
-            path: /
+            path: /healthz
             port: 3000
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
         livenessProbe:
           httpGet:
-            path: /
+            path: /healthz
             port: 3000
           initialDelaySeconds: 45
           periodSeconds: 30
